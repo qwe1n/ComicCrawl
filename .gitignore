@@ -1,0 +1,4 @@
+resources/*
+crawl/*
+__pycache__/*
+
