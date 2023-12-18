@@ -1,21 +1,20 @@
-from crawl import Crawl
 from bs4 import BeautifulSoup
-import os
+import chardet
 from urllib.parse import urljoin
+from requests import get
+from adapter import Adapter
 
-class Qimanwu(Crawl):
-	def __init__(self, begin:int=0, end:int=-1):
-		super().__init__("奇漫屋","https://www.eafomfg.cn",begin,end)
+class Qimanwu(Adapter):
+	def __init__(self):
+		super().__init__("奇漫屋","https://www.eafomfg.cn")
 
 	def search(self,keyword:str=""):
-		if keyword == "":
-			keyword = input("请输入搜索关键词:\n")
 		html = self.get('search?key='+keyword).text
 		soup = BeautifulSoup(html,'html.parser')
 		comic_list = soup.select(".mh-item")
 		if (len(comic_list) == 0):
 			print("未找到相关漫画")
-			return 
+			return {}
 		print("搜索结果如下：")
 		i = 0
 		for comic in comic_list:
@@ -23,28 +22,19 @@ class Qimanwu(Crawl):
 			i += 1
 		print("请输入序号选择漫画：")
 		choice = input()
-		self.comic['title'] = comic_list[int(choice)].select("div > div > h2 > a")[0]['title'].strip()
-		self.comic['url'] = comic_list[int(choice)].select("div > a")[0]['href']
-		if not os.path.exists(os.path.join(self.config['download_path'],self.comic['title'].strip())):
-			os.mkdir(os.path.join(self.config['download_path'],self.comic['title'].strip()))
+		comic = {}
+		comic['title'] = comic_list[int(choice)].select("div > div > h2 > a")[0]['title'].strip()
+		comic['url'] = comic_list[int(choice)].select("div > a")[0]['href']
+		return comic
 	
-	def crawl_chapters(self):
-		html = self.get(self.comic['url']).text
+	def crawl_chapters(self,comic_url):
+		html = self.get(comic_url).text
 		soup = BeautifulSoup(html,'html.parser')
 		chapter_soup_list = soup.select("#chapterlistload .detail-list-form-item")
-		self.comic['chapter_list'] = []
-		for chapter_soup in chapter_soup_list:
-			if chapter_soup.text in self.comic['status']['chapter_loaded']:
-				continue
-			self.comic['chapter_list'].append({
-				'href'	: chapter_soup['href'],
-				'title'	: chapter_soup.text.strip(),
-				'images'	: []
-			})
-			self.comic['status']['chapter_loaded'].append(chapter_soup.text)
-		self.comic['status']['chapter_loaded_finished'] = True
+		return chapter_soup_list
+		
 
-	def crawl_images(self, chapter_href):
+	def crawl_images(self,comic_url, chapter_href):
 		html = self.get(chapter_href).text
 		soup = BeautifulSoup(html,'html.parser')
 		images = []

@@ -1,23 +1,17 @@
-from requests import get
-from urllib.parse import urljoin
 import os
 import asyncio
 import aiohttp
 import aiofiles
 from tqdm import tqdm
 import yaml
-import chardet
 import base64
-from io import BytesIO
 
 class Crawl():
-	def __init__(self, name ,domain, begin:int=0, end:int=-1):
-		self.name = name
-		self.domain = domain
-		self.begin = begin
-		self.end = end
+	def __init__(self, adapter):
+		self.adapter = adapter
 		self.comic = {
-			'domain': self.domain,
+			'adapter': adapter.name,
+			'domain': self.adapter.domain,
 			'title'	: "",
 			'url'	: "",
 			'chapter_list': [],
@@ -29,10 +23,6 @@ class Crawl():
 		}
 		self.config = {
 			"semaphore" :asyncio.Semaphore(10),
-			"headers"	:{
-				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
-				"Referer"	: self.domain
-			},
 			"download_path": os.path.join(os.getcwd(), 'resources')
 		}
 		if not os.path.exists(os.path.join(os.getcwd(), 'resources')):
@@ -62,23 +52,31 @@ class Crawl():
 	def dumpYaml(self):
 		with open(os.path.join(self.config['download_path'],self.comic['title'], 'config.yaml'), 'w') as f:
 			yaml.dump(self.comic, f)
-
-	def get(self, target:str):
-		if "http" not in target:
-			target = urljoin(self.domain,target)
-		response = get(target,headers=self.config['headers'])
-		encoding = chardet.detect(response.content)['encoding']
-		response.encoding = encoding
-		return response
 	
-	def search(self):
-		pass
-
-	def crawl_images(self):
-		pass 
+	def search(self,keyword:str=""):
+		if keyword == "":
+			keyword = input("请输入搜索关键词:\n")
+		comic = self.adapter.search(keyword)
+		if comic == {}:
+			return
+		self.comic['title'] = comic['title']
+		self.comic['url'] = comic['url']
+		if not os.path.exists(os.path.join(self.config['download_path'],self.comic['title'].strip())):
+			os.mkdir(os.path.join(self.config['download_path'],self.comic['title'].strip()))
 
 	def crawl_chapters(self):
-		pass
+		chapter_soup_list = self.adapter.crawl_chapters(self.comic['url'])
+		self.comic['chapter_list'] = []
+		for chapter_soup in chapter_soup_list:
+			if chapter_soup.text in self.comic['status']['chapter_loaded']:
+				continue
+			self.comic['chapter_list'].append({
+				'href'	: chapter_soup['href'],
+				'title'	: chapter_soup.text.strip(),
+				'images'	: []
+			})
+			self.comic['status']['chapter_loaded'].append(chapter_soup.text)
+		self.comic['status']['chapter_loaded_finished'] = True
 
 	async def download(self,url:str,comic_name:str, chapter_title:str, filename:str):
 		filename = os.path.join(os.getcwd(), 'resources', self.comic['title'].strip(), chapter_title.strip(), filename)
@@ -91,7 +89,7 @@ class Crawl():
 					await f.close()
 			else:
 				async with aiohttp.ClientSession() as session:
-					async with session.get(url, headers=self.config['headers']) as resp:
+					async with session.get(url, headers=self.adapter.config['headers']) as resp:
 						if resp.status == 200:
 							async with aiofiles.open(filename,mode='wb+') as f:
 								await f.write(await resp.content.read())
@@ -100,7 +98,7 @@ class Crawl():
 							print("Error downloading " + url)
 	
 	async def save_chapter_images(self):
-		for chapter in self.comic['chapter_list'][self.begin:self.end]:
+		for chapter in self.comic['chapter_list']:
 			if not os.path.exists(os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter['title'].strip())):
 				os.mkdir(os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter['title'].strip()))
 			if chapter['title'] in self.comic['status']['chapter_downloaded']:
@@ -108,7 +106,7 @@ class Crawl():
 				continue
 			tasks = []
 			if len(chapter['images']) == 0:
-				chapter['images'] = self.crawl_images(chapter['href'])
+				chapter['images'] = self.adapter.crawl_images(self.comic['url'],chapter['href'])
 			images = chapter['images']
 			index = 1
 			pbar = tqdm(total=len(images), desc=chapter['title'], unit='item')
@@ -124,12 +122,14 @@ class Crawl():
 	def run(self, title:str=""):
 		self.search(title)
 		self.parseYaml()
+		if self.comic['adapter'] != self.adapter.name:
+			print("配置文件与适配器不兼容")
+			print(f"请更换适配器为{self.comic['adapter']} 或者删除配置文件config.yaml")
+			return
 		try:
 			if not self.comic['status']['chapter_loaded_finished'] == True:
 				self.crawl_chapters()
-			if self.end == -1:
-				self.end = len(self.comic['chapter_list'])
-			print(f"需要爬取的章数为:\t"+str(self.end - self.begin))
+			print(f"将要爬取的章数为:\t"+str(len(self.comic['chapter_list'])))
 			asyncio.get_event_loop().run_until_complete(self.save_chapter_images())
 		except Exception as e:
 			raise e
