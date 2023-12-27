@@ -1,8 +1,6 @@
 from bs4 import BeautifulSoup
-import chardet
 from urllib.parse import urljoin
-from requests import get
-from adapter import Adapter
+from crawl.adapter import Adapter
 
 class Qimanwu(Adapter):
 	def __init__(self):

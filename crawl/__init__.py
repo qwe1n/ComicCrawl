@@ -1,3 +1,5 @@
+__version__ = "1.0"
+
 import os
 import asyncio
 import aiohttp
@@ -6,8 +8,10 @@ from tqdm import tqdm
 import yaml
 import base64
 
+___all__ = ['Crawl']
+
 class Crawl():
-	def __init__(self, adapter):
+	def __init__(self, adapter, path):
 		self.adapter = adapter
 		self.comic = {
 			'adapter': adapter.name,
@@ -19,14 +23,16 @@ class Crawl():
 				'chapter_downloaded': [],
 				'chapter_loaded': [],
 				'chapter_loaded_finished': False,
+				'current_num_of_images': 0,
+				'current_chapter': ''
 			}
 		}
 		self.config = {
 			"semaphore" :asyncio.Semaphore(10),
-			"download_path": os.path.join(os.getcwd(), 'resources')
+			"download_path": path #漫画保存路径
 		}
-		if not os.path.exists(os.path.join(os.getcwd(), 'resources')):
-			os.mkdir(os.path.join(os.getcwd(), 'resources'))
+		if not os.path.exists(path):
+			os.mkdir(path)
 		"""
 		comic {
 			domain	: 网站域名
@@ -40,6 +46,8 @@ class Crawl():
 			status	: 爬取状态
 				- downloaded	: 爬取完的章节
 				- chapter_list_loaded	: 章节列表是否爬取
+				- current_num_of_images : 目前在爬的章节的已爬图片数量
+				- current_chapter : 目前在爬的章节
 		}
 		"""
 	
@@ -104,15 +112,22 @@ class Crawl():
 			if chapter['title'] in self.comic['status']['chapter_downloaded']:
 				print(f"{chapter['title']} already downloaded")
 				continue
+			if chapter['title'] != self.comic['status']['current_chapter']:
+				self.comic['status']['current_chapter'] = chapter['title']
+				self.comic['status']['current_num_of_images'] = 0
 			tasks = []
 			if len(chapter['images']) == 0:
 				chapter['images'] = self.adapter.crawl_images(self.comic['url'],chapter['href'])
 			images = chapter['images']
-			index = 1
+			index = self.comic['status']['current_num_of_images'] + 1
 			pbar = tqdm(total=len(images), desc=chapter['title'], unit='item')
-			for image in images:
+			pbar.update(self.comic['status']['current_num_of_images'])
+			for image in images[self.comic['status']['current_num_of_images']:]:
 				task = asyncio.create_task(self.download(image,self.comic['title'], chapter['title'] , str(index).rjust(2,'0')+'.jpg'))
-				task.add_done_callback(lambda t: pbar.update(1))
+				def callback():
+					pbar.update(1)
+					self.comic['status']['current_num_of_images'] += 1
+				task.add_done_callback(lambda t: callback())
 				tasks.append(task)
 				index += 1
 			await asyncio.wait(tasks)
@@ -135,4 +150,5 @@ class Crawl():
 			raise e
 		finally:
 			self.dumpYaml()
+			print("配置文件已保存")
 		print("爬取完成")

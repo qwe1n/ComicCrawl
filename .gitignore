@@ -1,5 +1,7 @@
 resources/*
-crawl/*
+virtualenv/*
 __pycache__/*
+activate.bat
+
 
 OpenComic.Portable.1.0.0.exe

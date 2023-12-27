@@ -8,7 +8,7 @@ class Adapter():
 		self.domain = domain
 		self.config = {
 			"headers"	:{
-				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
 				"Referer"	: self.domain
 			},
 		}
@@ -21,11 +21,11 @@ class Adapter():
 		return comic
 		
 	def crawl_chapters(self, comic_url):
-		chapter_soup_list = None
+		chapter_soup_list = [None] # <a href='{url}'>{title}</a>
 		return chapter_soup_list
 
 	def crawl_images(self,comic_url,chapter_href):
-		images = []
+		images = [] # list of images' url
 		return images
 	
 	def get(self, target:str):
