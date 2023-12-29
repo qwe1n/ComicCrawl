@@ -17,37 +17,12 @@ ComicCrawl/
  |   |   ├── fengche.py
  |   |   ├── godness.py
  |   |   ├── qimanwu.py
- |   |   ├── __init__.py
- |   |   └── __pycache__/
- |   |       ├── adapter.cpython-311.pyc
- |   |       ├── fengche.cpython-311.pyc
- |   |       ├── fengche2.cpython-311.pyc
- |   |       ├── godness.cpython-311.pyc
- |   |       ├── kumwu.cpython-311.pyc
- |   |       ├── qimanwu.cpython-311.pyc
- |   |       └── __init__.cpython-311.pyc
- |   ├── seleniumAdapter/
- |   |   ├── adapter.py
- |   |   ├── fengche.py
- |   |   ├── godness.py
- |   |   ├── qimanwu.py
- |   |   ├── __init__.py
- |   |   └── __pycache__/
- |   |       ├── adapter.cpython-311.pyc
- |   |       ├── fengche.cpython-311.pyc
- |   |       ├── fengche2.cpython-311.pyc
- |   |       ├── godness.cpython-311.pyc
- |   |       ├── kumwu.cpython-311.pyc
- |   |       ├── qimanwu.cpython-311.pyc
- |   |       └── __init__.cpython-311.pyc
- |   └── __pycache__/
- |       └── __init__.cpython-311.pyc
- ├── resources/
- |   └──  <Empty>
- └── __pycache__/
-     ├── adapter.cpython-311.pyc
-     ├── crawl.cpython-311.pyc
-     ├── fengche.cpython-311.pyc
-     ├── qimanwu.cpython-311.pyc
-     ├── website.cpython-311.pyc
-     └── welcome.cpython-311.pyc
+ |   |   └── __init__.py
+ |   └── seleniumAdapter/
+ |       ├── adapter.py
+ |       ├── fengche.py
+ |       ├── godness.py
+ |       ├── qimanwu.py
+ |       └── __init__.py
+ └── resources/
+     └──  <Empty>

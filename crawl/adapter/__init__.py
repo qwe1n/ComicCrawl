@@ -1,7 +1,7 @@
 __version__ = "1.0"
 
 from .adapter import Adapter
-from .fengche2 import Fengche
+from .fengche import Fengche
 from .qimanwu import Qimanwu
 from .godness import Godness
 
