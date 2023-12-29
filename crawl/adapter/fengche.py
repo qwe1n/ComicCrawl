@@ -18,7 +18,7 @@ class Fengche(Adapter):
 		html = self.get(comic_url).text
 		soup = BeautifulSoup(html,'html.parser')
 		chapter_soup_list = soup.select(".chapter-list > li > a")
-		return chapter_soup_list
+		return [{"title": x.text.strip(), "href": x['href']} for x in chapter_soup_list]
 
 	def crawl_images(self,comic_url,chapter_href):
 		html = self.get(urljoin(comic_url,chapter_href)).text

@@ -18,7 +18,7 @@ class Godness(Adapter):
 		html = self.get(comic_url).text
 		soup = BeautifulSoup(html,'html.parser')
 		chapter_soup_list = soup.select(".j-chapter-link")
-		return chapter_soup_list
+		return [{"title": x.text.strip(), "href": x['href']} for x in chapter_soup_list]
 
 	def crawl_images(self,comic_url, chapter_href):
 		html = self.get(chapter_href).text

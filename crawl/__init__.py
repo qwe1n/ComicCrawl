@@ -24,7 +24,6 @@ class Crawl():
 		self.status = {
 			'stage'	: 0,
 			'chapter_downloaded': [],
-			'chapter_loaded': [],
 			'current_num_of_images': 0,
 			'current_chapter': ''
 		}
@@ -46,7 +45,6 @@ class Crawl():
 					- []
 		status	: 爬取状态
 			- downloaded	: 爬取完的章节
-			- chapter_list_loaded	: 章节列表是否爬取
 			- current_num_of_images : 目前在爬的章节的已爬图片数量
 			- current_chapter : 目前在爬的章节
 		"""
@@ -95,17 +93,14 @@ class Crawl():
 		if self.status['stage'] < 1:
 			print("请先确定漫画!")
 			return
-		chapter_soup_list = self.adapter.crawl_chapters(self.comic['url'])
+		chapter_list = self.adapter.crawl_chapters(self.comic['url'])
 		self.comic['chapter_list'] = []
-		for chapter_soup in chapter_soup_list:
-			if chapter_soup.text in self.status['chapter_loaded']:
-				continue
+		for chapter in chapter_list:
 			self.comic['chapter_list'].append({
-				'href'	: chapter_soup['href'],
-				'title'	: chapter_soup.text.strip(),
+				'href'	: chapter['href'],
+				'title'	: chapter['title'],
 				'images'	: []
 			})
-			self.status['chapter_loaded'].append(chapter_soup.text)
 		self.status['stage'] = 2
 
 	async def download(self,url:str,chapter_title:str, filename:str):
@@ -127,7 +122,7 @@ class Crawl():
 						else:
 							print("Error downloading " + url)
 	
-	async def save_chapter_images(self):
+	async def save_images(self):
 		for chapter in self.comic['chapter_list']:
 			if not os.path.exists(os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter['title'].strip())):
 				os.mkdir(os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter['title'].strip()))
@@ -168,7 +163,7 @@ class Crawl():
 			if self.status['stage'] < 2:
 				self.crawl_chapters()
 			print(f"将要爬取的章数为:\t"+str(len(self.comic['chapter_list'])))
-			asyncio.get_event_loop().run_until_complete(self.save_chatper_images())
+			asyncio.get_event_loop().run_until_complete(self.save_images())
 		except Exception as e:
 			raise e
 		finally:

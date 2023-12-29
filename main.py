@@ -1,5 +1,5 @@
 from welcome import welcomeFun
-from crawl import Crawl, adapter
+from crawl import Crawl, adapter, seleniumAdapter
 
 import argparse
 import os
@@ -16,10 +16,9 @@ if __name__ == '__main__':
       welcomeFun()
       adapterDist = {
            'fengche': adapter.Fengche,
-           'qimanwu': adapter.Qimanwu,
-           'godness': adapter.Godness
+           'qimanwu': seleniumAdapter.Qimanwu,
+           'godness': seleniumAdapter.Godness
 	  }
       args = parseArgs()
       crawl = Crawl(adapterDist[args.adapter](),path=args.path)
       crawl.run(args.comic)
-    

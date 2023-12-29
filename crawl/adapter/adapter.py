@@ -21,8 +21,11 @@ class Adapter():
 		return comic
 		
 	def crawl_chapters(self, comic_url):
-		chapter_soup_list = [None] # <a href='{url}'>{title}</a>
-		return chapter_soup_list
+		chapter_list = [{
+			'title': "",
+			'href'  : ""
+		}]
+		return chapter_list
 
 	def crawl_images(self,comic_url,chapter_href):
 		images = [] # list of images' url
