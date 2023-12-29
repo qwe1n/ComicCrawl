@@ -1,8 +1,9 @@
 resources/*
-pyenv/*
+.pyenv/*
 __pycache__/*
 activate.bat
 
 .gitignore
 
 OpenComic.Portable.1.0.0.exe
+
