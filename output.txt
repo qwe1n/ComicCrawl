@@ -2,7 +2,6 @@ ComicCrawl/
  ├── .gitignore
  ├── activate.bat
  ├── main.py
- ├── OpenComic.Portable.1.0.0.exe
  ├── output.txt
  ├── requirements.txt
  ├── structure.py
