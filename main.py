@@ -14,12 +14,12 @@ def parseArgs():
 
 if __name__ == '__main__':
       welcomeFun()
-      adapter = {
+      adapterDist = {
            'fengche': adapter.Fengche,
            'qimanwu': adapter.Qimanwu,
            'godness': adapter.Godness
 	  }
       args = parseArgs()
-      crawl = Crawl(adapter[args.adapter](),path=args.path)
+      crawl = Crawl(adapterDist[args.adapter](),path=args.path)
       crawl.run(args.comic)
     

@@ -1,10 +1,8 @@
 resources/*
-virtualenv/*
+pyenv/*
 __pycache__/*
 activate.bat
 
 .gitignore
-
-kivyApp.py
 
 OpenComic.Portable.1.0.0.exe

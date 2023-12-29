@@ -14,10 +14,10 @@ class Adapter():
 		}
 
 	def search(self,keyword:str=""):
-		comic = {
+		comic = [{
 			'title': "",
 			'url'  : ""
-		}
+		}]
 		return comic
 		
 	def crawl_chapters(self, comic_url):
