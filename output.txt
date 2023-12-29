@@ -15,7 +15,6 @@ ComicCrawl/
  |   ├── adapter/
  |   |   ├── adapter.py
  |   |   ├── fengche.py
- |   |   ├── fengche2.py
  |   |   ├── godness.py
  |   |   ├── qimanwu.py
  |   |   ├── __init__.py
