@@ -2,7 +2,6 @@ ComicCrawl/
  ├── .gitignore
  ├── activate.bat
  ├── main.py
- ├── output.txt
  ├── requirements.txt
  ├── structure.py
  ├── welcome.py

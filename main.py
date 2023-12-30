@@ -20,5 +20,5 @@ if __name__ == '__main__':
            'godness': seleniumAdapter.Godness
 	  }
       args = parseArgs()
-      crawl = Crawl(adapterDist[args.adapter](),path=args.path)
-      crawl.run(args.comic)
+      crawler = Crawl(adapterDist[args.adapter](),path=args.path)
+      crawler.run(args.comic)
