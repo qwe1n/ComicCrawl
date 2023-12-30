@@ -138,7 +138,7 @@ class Crawl():
 		self.parseYaml()
 		if self.comic['adapter'] != self.adapter.name:
 			print("配置文件与适配器不兼容")
-			print(f"请更换适配器为{self.comic['adapter']} 或者删除配置文件config.yaml")
+			print(f"请更换适配器为{self.comic['adapter']} 或者删除配置文件comic.yaml")
 			return
 		try:
 			if self.comic['stage'] < 2:

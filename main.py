@@ -17,7 +17,11 @@ if __name__ == '__main__':
       adapterDist = {
            'fengche': adapter.Fengche,
            'qimanwu': seleniumAdapter.Qimanwu,
-           'godness': seleniumAdapter.Godness
+           'godness': seleniumAdapter.Godness,
+           'baozi'  : seleniumAdapter.Baozi,
+           'gufeng' : seleniumAdapter.Gufeng,
+           'yinghua': seleniumAdapter.Yinghua,
+           'yinghua2': adapter.Yinghua
 	  }
       args = parseArgs()
       crawler = Crawl(adapterDist[args.adapter](),path=args.path)

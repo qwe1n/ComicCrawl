@@ -13,12 +13,14 @@ class Adapter():
 			},
 		}
 		options = Options()
-		options.add_argument('--disable-infobars')
-		options.add_argument('--blink-settings=imagesEnabled=false')
-		options.add_argument('--disable-extensions')
-		options.add_argument('--disable-gpu')
-		options.add_argument('--disable-cache')
-		options.add_argument('--disable-network-cache')
+		options.set_preference('extensions.enabledScopes', 0)
+		options.set_preference('permissions.default.image', 2)
+		options.set_preference('plugins.click_to_play', True)
+		options.set_preference('layers.acceleration.disabled', True)
+		options.set_preference('browser.cache.disk.enable', False)
+		options.set_preference('browser.cache.memory.enable', False)
+		options.set_preference('browser.cache.offline.enable', False)
+		options.set_preference('network.http.use-cache', False)
 		options.add_argument('--headless') 
 		self.browser = webdriver.Firefox(options=options)
 
