@@ -30,6 +30,21 @@ python main.py
 - 易于拓展，将爬虫分为两部分：下载器和适配器，如果需要爬新的网站，只需仿造其他适配器，很容易就能再写一个新的适配器
 	- crawl/adapter 目录下的适配器是基于beautifulsoup和requests爬取的
 	- crawl/seleniumAdapter目录下的适配器是基于selenium爬取的
+ ## 已有的适配器
+ -- | -- | -- | --
+ 参数名称 | 对应适配器 | 网站名称 | 备注
+'fengche'   | adapter.Fengche | 风车漫画 |
+'fengche2'   | seleniumAdapter.Fengche | 风车漫画 |
+'qimanwu'    | adapter.Qimanwu | 奇漫屋 |
+'qimanwu2'   | seleniumAdapter.Qimanwu | 奇漫屋 |
+'godness'    | adapter.Godness | 女神漫画 |
+'godness2'   | seleniumAdapter.Godness | 女神漫画 |
+'baozi'      | seleniumAdapter.Baozi | 包子漫画 | 较慢
+'gufeng'     | seleniumAdapter.Gufeng | 古风漫画 | 很慢
+'yinghua'    | adapter.Yinghua | 樱花漫画 |
+'yinghua2'   | seleniumAdapter.Yinghua | 樱花漫画 |
+'biqu'       | adapter.Biqu | 笔趣漫画 |
+'biqu2'      | seleniumAdapter.Biqu | 笔趣漫画 |
 
 ## 拓展说明
 在适配器目录下新建py文件编写，按照下述格式
