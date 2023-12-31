@@ -50,3 +50,4 @@ class Adapter():
 	def __del__(self):
 		print("浏览器关闭中...")
 		self.browser.quit()
+		return
