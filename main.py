@@ -15,14 +15,18 @@ def parseArgs():
 if __name__ == '__main__':
       welcomeFun()
       adapterDist = {
-           'fengche': adapter.Fengche,
-           'qimanwu': seleniumAdapter.Qimanwu,
-           'godness': seleniumAdapter.Godness,
-           'baozi'  : seleniumAdapter.Baozi,
-           'gufeng' : seleniumAdapter.Gufeng,
-           'yinghua': seleniumAdapter.Yinghua,
-           'biqu'   : adapter.Biqu,
-           'biqu2'  : seleniumAdapter.Biqu
+           'fengche'    : adapter.Fengche,
+           'fengche2'   : seleniumAdapter.Fengche,
+           'qimanwu'    : adapter.Qimanwu,
+           'qimanwu2'   : seleniumAdapter.Qimanwu,
+           'godness'    : adapter.Godness,
+           'godness2'   : seleniumAdapter.Godness,
+           'baozi'      : seleniumAdapter.Baozi,
+           'gufeng'     : seleniumAdapter.Gufeng,
+           'yinghua'    : adapter.Yinghua,
+           'yinghua2'   : seleniumAdapter.Yinghua,
+           'biqu'       : adapter.Biqu,
+           'biqu2'      : seleniumAdapter.Biqu
 	  }
       args = parseArgs()
       crawler = Crawl(adapterDist[args.adapter](),path=args.path)
