@@ -12,17 +12,27 @@ class Baozi(Adapter):
 
 	def search(self, keyword:str=""):
 		self.get(f'/s/{keyword}/')
+		comic_list_container = []
 		comic_list = []
 		while True:
 			next_page = self.browser.find_elements(By.CSS_SELECTOR, "body > main > div > div.flex.justify-between.items-center.md\:gap-4.mx-2.md\:mx-0.mt-5.mb-10 > a:nth-child(3) > button")
-			comic_list += self.browser.find_elements(By.CSS_SELECTOR, ".pb-2")
+			comic_list_container = self.browser.find_elements(By.CSS_SELECTOR, ".pb-2")
+			for comic in comic_list_container:
+				try:
+					comic_list.append({
+						"title"	: comic.find_elements(By.CSS_SELECTOR, ".cardtitle")[0].text,
+						"url"	: comic.find_elements(By.CSS_SELECTOR, "a")[0].get_attribute("href")
+					})
+				except Exception as e:
+					print(e)
+					continue
 			if len(next_page) > 0:
 				next_page[0].click()
 			else:
 				break
 		if (len(comic_list) == 0):
 			return []
-		return [{"title": x.find_elements(By.CSS_SELECTOR, ".cardtitle")[0].text,"url":x.find_elements(By.CSS_SELECTOR, "div > a")[0].get_attribute("href")} for x in comic_list]
+		return comic_list
 	
 	def crawl_chapters(self, comic_url):
 		self.get(comic_url)

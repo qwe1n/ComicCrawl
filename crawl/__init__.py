@@ -90,7 +90,7 @@ class Crawl():
 		self.comic['stage'] = 2
 
 	async def download(self,url:str,chapter_title:str, filename:str):
-		filename = os.path.join(os.getcwd(), 'resources', self.comic['title'].strip(), chapter_title.strip(), filename)
+		filename = os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter_title.strip(), filename)
 		async with asyncio.Semaphore(self.config['max_threads']):
 			if url.startswith('data:image'):
 				base64_data = url.split(',')[1]
@@ -139,12 +139,11 @@ class Crawl():
 			chapter['downloaded'] = True
 
 	def run(self, title:str=""):
-		if self.comic['stage'] == 0:
-			self.search(title)
+		self.search(title)
 		self.parseYaml()
 		if self.comic['adapter'] != self.adapter.name:
 			print("配置文件与适配器不兼容")
-			print(f"请更换适配器为{self.comic['adapter']} 或者删除配置文件comic.yaml")
+			print(f"请更换适配器为{self.comic['adapter']} 或者删除配置文件comic.yaml重新下载")
 			return
 		try:
 			if self.comic['stage'] < 2:
