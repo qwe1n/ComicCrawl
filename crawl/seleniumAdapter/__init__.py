@@ -7,5 +7,6 @@ from .godness import Godness
 from .baozi import Baozi
 from .gufeng import Gufeng
 from .yinghua import Yinghua
+from .biqu import Biqu
 
-___all__ = ['__version__', 'Adapter', 'Fengche', 'Qimanwu', 'Godness', 'Baozi', 'Gufeng', 'Yinghua']
+___all__ = ['__version__', 'Adapter', 'Fengche', 'Qimanwu', 'Godness', 'Baozi', 'Gufeng', 'Yinghua', 'Biqu']

@@ -21,7 +21,7 @@ class Adapter():
 		options.set_preference('browser.cache.memory.enable', False)
 		options.set_preference('browser.cache.offline.enable', False)
 		options.set_preference('network.http.use-cache', False)
-		options.add_argument('--headless') 
+		#options.add_argument('--headless') 
 		self.browser = webdriver.Firefox(options=options)
 
 	def search(self,keyword:str=""):

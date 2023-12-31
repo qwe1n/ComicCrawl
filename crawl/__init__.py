@@ -99,14 +99,20 @@ class Crawl():
 					await f.write(image_data)
 					await f.close()
 			else:
-				async with aiohttp.ClientSession() as session:
-					async with session.get(url, headers=self.adapter.config['headers']) as resp:
-						if resp.status == 200:
-							async with aiofiles.open(filename,mode='wb+') as f:
-								await f.write(await resp.content.read())
-								await f.close()
-						else:
-							print("Error downloading " + url)
+				for i in range(3):
+					try:
+						async with aiohttp.ClientSession() as session:
+							async with session.get(url, headers=self.adapter.config['headers']) as resp:
+								if resp.status == 200:
+									async with aiofiles.open(filename,mode='wb+') as f:
+										await f.write(await resp.content.read())
+										await f.close()
+									break
+								else:
+									print(f"Error downloading {url}. Retrying...")
+					except Exception as e:
+						print(f"Failed to download {url} after 3 attempts")
+						await asyncio.sleep(1)
 	
 	async def save_images(self):
 		for chapter in self.comic['chapter_list']:
