@@ -109,9 +109,9 @@ class Crawl():
 										await f.close()
 									break
 								else:
-									print(f"Error downloading {url}. Retrying...")
+									print(f"\nError downloading {url}. Retrying...")
 					except Exception as e:
-						print(f"Failed to download {url} after 3 attempts")
+						print(f"\nFailed to download {url} after 3 attempts")
 						await asyncio.sleep(1)
 	
 	async def save_images(self):
@@ -119,7 +119,7 @@ class Crawl():
 			if not os.path.exists(os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter['title'].strip())):
 				os.mkdir(os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter['title'].strip()))
 			if chapter['downloaded'] == True:
-				print(f"{chapter['title']} already downloaded")
+				print(f"\n{chapter['title']} already downloaded")
 				continue
 			tasks = []
 			if len(chapter['images']) == 0:
