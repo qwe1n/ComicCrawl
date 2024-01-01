@@ -1,6 +1,7 @@
 from urllib.parse import urljoin
 from crawl.seleniumAdapter import Adapter
 from selenium.webdriver.common.by import By
+from time import sleep
 
 """
 这个比较慢。
@@ -46,7 +47,14 @@ class Baozi(Adapter):
 	def crawl_images(self,comic_url,chapter_href):
 		self.get(urljoin(comic_url,chapter_href))
 		images = []
-		images_container = self.browser.find_elements(By.CSS_SELECTOR, ".lazypreload")
+		for i in range(2):
+			images_container = self.browser.find_elements(By.CSS_SELECTOR, ".lazypreload")
+			if len(images_container) == 0:
+				print("歇一会儿")
+				sleep(12)
+				self.browser.refresh()
+			else:
+				break
 		for image in images_container:
 			if 'http' in image.get_attribute("data-src"):
 				images.append(image.get_attribute("data-src"))

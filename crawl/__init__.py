@@ -99,31 +99,36 @@ class Crawl():
 					await f.write(image_data)
 					await f.close()
 			else:
-				for i in range(3):
-					try:
+				try:
+					for i in range(3):
 						async with aiohttp.ClientSession() as session:
 							async with session.get(url, headers=self.adapter.config['headers']) as resp:
 								if resp.status == 200:
 									async with aiofiles.open(filename,mode='wb+') as f:
 										await f.write(await resp.content.read())
-										await f.close()
-									break
+									return
 								else:
 									print(f"\nError downloading {url}. Retrying...")
-					except Exception as e:
-						print(f"\nFailed to download {url} after 3 attempts")
-						await asyncio.sleep(1)
+					print(f"\nFailed to download {url} after 3 attempts")
+				except Exception as e:
+					print(e)
 	
 	async def save_images(self):
 		for chapter in self.comic['chapter_list']:
 			if not os.path.exists(os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter['title'].strip())):
 				os.mkdir(os.path.join(self.config['download_path'], self.comic['title'].strip(), chapter['title'].strip()))
 			if chapter['downloaded'] == True:
-				print(f"\n{chapter['title']} already downloaded")
+				print(f"\n{chapter['title']} 已下载")
 				continue
 			tasks = []
-			if len(chapter['images']) == 0:
-				chapter['images'] = self.adapter.crawl_images(self.comic['url'],chapter['href'])
+			for i in range(3):
+				if i == 0:
+					chapter['images'] = self.adapter.crawl_images(self.comic['url'],chapter['href'])
+				elif len(chapter['images']) > 0:
+					break
+				else:
+					print("\nError crawling images from {}".format(chapter['title']))
+					await asyncio.sleep(15)
 			images = chapter['images']
 			index = 1
 			pbar = tqdm(total=len(images), desc=chapter['title'], unit='item')
