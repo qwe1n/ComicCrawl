@@ -9,10 +9,13 @@ class Fengche(Adapter):
 	def search(self, keyword:str=""):
 		html = self.get(f'/search/{keyword}/').text
 		soup = BeautifulSoup(html,'html.parser')
+		search_msg = soup.select(".search-msg")[0].text
+		if "结果为空" in search_msg:
+			return []
 		comic_list = soup.select(".cart-item")
 		if (len(comic_list) == 0):
 			return []
-		return [{"title": x.select(".hover-a")[0].text,"url":x.select("div > a")[0]['href']} for x in comic_list]
+		return [{"title": x.select(".hover-a")[0].text.strip(),"url":x.select("div > a")[0]['href']} for x in comic_list]
 	
 	def crawl_chapters(self, comic_url):
 		html = self.get(comic_url).text

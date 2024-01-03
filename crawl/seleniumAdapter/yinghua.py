@@ -9,10 +9,13 @@ class Yinghua(Adapter):
 
 	def search(self, keyword:str=""):
 		self.get(f'/search?searchkey={keyword}')
+		search_msg = self.browser.find_elements(By.CSS_SELECTOR,".search-msg")[0].text
+		if "结果为空" in search_msg:
+			return []
 		comic_list = self.browser.find_elements(By.CSS_SELECTOR, ".comics-card")
 		if (len(comic_list) == 0):
 			return []
-		return [{"title": x.find_elements(By.CSS_SELECTOR, "div > a")[0].get_attribute("title"),"url":x.find_elements(By.CSS_SELECTOR, "div > a")[0].get_attribute("href")} for x in comic_list]
+		return [{"title": x.find_elements(By.CSS_SELECTOR, "div > a")[0].get_attribute("title").strip(),"url":x.find_elements(By.CSS_SELECTOR, "div > a")[0].get_attribute("href")} for x in comic_list]
 	
 	def crawl_chapters(self, comic_url):
 		self.get(comic_url)

@@ -9,10 +9,13 @@ class Yinghua(Adapter):
 	def search(self, keyword:str=""):
 		html = self.get('/search?searchkey='+keyword).text
 		soup = BeautifulSoup(html,'html.parser')
+		search_msg = soup.select(".search-msg")[0].text
+		if "结果为空" in search_msg:
+			return []
 		comic_list = soup.select(".comics-card")
 		if (len(comic_list) == 0):
 			return []
-		return [{"title": x.select("div > a")[0]['title'],"url":x.select("div > a")[0]['href']} for x in comic_list]
+		return [{"title": x.select("div > a")[0]['title'].strip(),"url":x.select("div > a")[0]['href']} for x in comic_list]
 
 	
 	def crawl_chapters(self,comic_url):

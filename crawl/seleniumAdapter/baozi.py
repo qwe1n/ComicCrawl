@@ -15,13 +15,13 @@ class Baozi(Adapter):
 		self.get(f'/s/{keyword}/')
 		comic_list_container = []
 		comic_list = []
-		while True:
+		for i in range(1): # 搜索出来会有一大堆不相关的，所以改成了这样
 			next_page = self.browser.find_elements(By.CSS_SELECTOR, "body > main > div > div.flex.justify-between.items-center.md\:gap-4.mx-2.md\:mx-0.mt-5.mb-10 > a:nth-child(3) > button")
 			comic_list_container = self.browser.find_elements(By.CSS_SELECTOR, ".pb-2")
 			for comic in comic_list_container:
 				try:
 					comic_list.append({
-						"title"	: comic.find_elements(By.CSS_SELECTOR, ".cardtitle")[0].text,
+						"title"	: comic.find_elements(By.CSS_SELECTOR, ".cardtitle")[0].text.strip(),
 						"url"	: comic.find_elements(By.CSS_SELECTOR, "a")[0].get_attribute("href")
 					})
 				except Exception as e:

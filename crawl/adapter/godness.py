@@ -12,7 +12,7 @@ class Godness(Adapter):
 		comic_list = soup.select(".common-comic-item")
 		if (len(comic_list) == 0):
 			return []
-		return [{"title": x.select(".comic__title > a")[0].text,"url":x.select("div > a")[0]['href']} for x in comic_list]
+		return [{"title": x.select(".comic__title > a")[0].text.strip(),"url":x.select("div > a")[0]['href']} for x in comic_list]
 
 	def crawl_chapters(self,comic_url):
 		html = self.get(comic_url).text

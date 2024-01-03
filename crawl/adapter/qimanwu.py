@@ -12,7 +12,7 @@ class Qimanwu(Adapter):
 		comic_list = soup.select(".mh-item")
 		if (len(comic_list) == 0):
 			return []
-		return [{"title": x.select("div > div > h2 > a")[0]['title'],"url":x.select("div > a")[0]['href']} for x in comic_list]
+		return [{"title": x.select("div > div > h2 > a")[0]['title'].strip(),"url":x.select("div > a")[0]['href']} for x in comic_list]
 
 	
 	def crawl_chapters(self,comic_url):

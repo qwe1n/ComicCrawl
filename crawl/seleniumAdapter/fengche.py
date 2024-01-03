@@ -9,10 +9,13 @@ class Fengche(Adapter):
 
 	def search(self, keyword:str=""):
 		self.get(f'/search/{keyword}/')
+		search_msg = self.browser.find_elements(By.CSS_SELECTOR,".search-msg")[0].text
+		if "结果为空" in search_msg:
+			return []
 		comic_list = self.browser.find_elements(By.CSS_SELECTOR, ".cart-item")
 		if (len(comic_list) == 0):
 			return []
-		return [{"title": x.find_elements(By.CSS_SELECTOR, ".hover-a")[0].text,"url":x.find_elements(By.CSS_SELECTOR, "div > a")[0].get_attribute("href")} for x in comic_list]
+		return [{"title": x.find_elements(By.CSS_SELECTOR, ".hover-a")[0].text.strip(),"url":x.find_elements(By.CSS_SELECTOR, "div > a")[0].get_attribute("href")} for x in comic_list]
 	
 	def crawl_chapters(self, comic_url):
 		self.get(comic_url)

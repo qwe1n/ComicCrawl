@@ -1,6 +1,7 @@
 __version__ = "1.0"
 
 import os
+import sys
 import asyncio
 import aiohttp
 import aiofiles
@@ -46,13 +47,16 @@ class Crawl():
 			self.comic = yaml.safe_load(f)
 	
 	def dumpYaml(self):
-		with open(os.path.join(self.config['download_path'],self.comic['title'], 'comic.yaml'), 'w') as f:
+		with open(os.path.join(self.config['download_path'],self.comic['title'], 'comic.yaml'), 'w+') as f:
 			yaml.dump(self.comic, f)
 	
 	def search(self,keyword:str=""):
 		if keyword == "":
 			keyword = input("请输入搜索关键词：")
 		comic_list = self.adapter.search(keyword)
+		if len(comic_list) == 0:
+			print("搜索结果为空")
+			sys.exit()
 		index = 1
 		for comic in comic_list:
 			print(f"{index}.{comic['title']}")
@@ -109,6 +113,7 @@ class Crawl():
 									return
 								else:
 									print(f"\nError downloading {url}. Retrying...")
+									await asyncio.sleep(1)
 					print(f"\nFailed to download {url} after 3 attempts")
 				except Exception as e:
 					print(e)

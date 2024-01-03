@@ -2,6 +2,8 @@ ComicCrawl/
  ├── .gitignore
  ├── activate.bat
  ├── main.py
+ ├── output.txt
+ ├── README.md
  ├── requirements.txt
  ├── structure.py
  ├── welcome.py
@@ -12,15 +14,43 @@ ComicCrawl/
  |   ├── __init__.py
  |   ├── adapter/
  |   |   ├── adapter.py
+ |   |   ├── biqu.py
  |   |   ├── fengche.py
  |   |   ├── godness.py
  |   |   ├── qimanwu.py
- |   |   └── __init__.py
- |   └── seleniumAdapter/
- |       ├── adapter.py
- |       ├── fengche.py
- |       ├── godness.py
- |       ├── qimanwu.py
- |       └── __init__.py
- └── resources/
-     └──  <Empty>
+ |   |   ├── yinghua.py
+ |   |   ├── __init__.py
+ |   |   └── __pycache__/
+ |   |       ├── adapter.cpython-311.pyc
+ |   |       ├── biqu.cpython-311.pyc
+ |   |       ├── fengche.cpython-311.pyc
+ |   |       ├── godness.cpython-311.pyc
+ |   |       ├── qimanwu.cpython-311.pyc
+ |   |       ├── yinghua.cpython-311.pyc
+ |   |       └── __init__.cpython-311.pyc
+ |   ├── seleniumAdapter/
+ |   |   ├── adapter.py
+ |   |   ├── baozi.py
+ |   |   ├── biqu.py
+ |   |   ├── fengche.py
+ |   |   ├── godness.py
+ |   |   ├── gufeng.py
+ |   |   ├── qimanwu.py
+ |   |   ├── yinghua.py
+ |   |   ├── __init__.py
+ |   |   └── __pycache__/
+ |   |       ├── adapter.cpython-311.pyc
+ |   |       ├── baozi.cpython-311.pyc
+ |   |       ├── biqu.cpython-311.pyc
+ |   |       ├── fengche.cpython-311.pyc
+ |   |       ├── godness.cpython-311.pyc
+ |   |       ├── gufeng.cpython-311.pyc
+ |   |       ├── qimanwu.cpython-311.pyc
+ |   |       ├── yinghua.cpython-311.pyc
+ |   |       └── __init__.cpython-311.pyc
+ |   └── __pycache__/
+ |       └── __init__.cpython-311.pyc
+ ├── resources/
+ |   └──  <Empty>
+ └── __pycache__/
+     └── welcome.cpython-311.pyc
